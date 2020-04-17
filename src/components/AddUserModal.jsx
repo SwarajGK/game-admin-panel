@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import uniqid from 'uniqid';
 import cloneDeep from 'clone-deep';
-import { Modal, Button, Input } from 'antd';
+import { Modal, Button, Input, message } from 'antd';
 import { CheckOutlined } from '@ant-design/icons';
 import UserNameField from './UserNameField';
 import { setUsersInDb, updateUsers } from '../utils';
@@ -26,6 +26,10 @@ export default function AddUserModal({ isAddUserVisible, onAddUsers, closeAddUse
   };
   
   const addNewUser = async () => {
+    if (!name) {
+      message.error('Please enter valid name');
+      return;
+    }
     const id = uniqid();
     const clonedUserList = cloneDeep(userList);
     clonedUserList.push({

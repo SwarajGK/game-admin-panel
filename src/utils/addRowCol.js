@@ -23,6 +23,7 @@ export const addUsersCol = (users, lastGameId, updateGame) => {
       users.map((user) => {
         return {
           ...user,
+          width: 100,
           render: (value) => {
             if (value >= 0) {
               return <span style={{ color: "#52c41a" }}>{value || 0}</span>;
