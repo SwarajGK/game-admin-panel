@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from "react";
 import { useSelector } from 'react-redux';
-import { Modal, Radio, InputNumber } from "antd";
+import { Modal, Radio, InputNumber, message } from "antd";
 import { getIsUpdating, getUpdatingGame } from '../slices/gamesSlice';
 import uniqid from 'uniqid';
 import { useEffect } from "react";
@@ -49,6 +49,10 @@ export default function AddGameModal({
   }, [setWinner, userPoints, setUserPoints]);
 
   const createGame = async () => {
+    if (!winner) {
+      message.error('Please select the winner');
+      return;
+    }
     if (isUpdating) {
       const { _id, id, name, day } = updatingGame;
       const totalSum = Object.values(userPoints).reduce((val, acc) => acc + val, 0);

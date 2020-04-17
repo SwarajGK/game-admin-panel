@@ -57,6 +57,7 @@ function App() {
     dispatch(setIsUpdating(false));
     dispatch(setUpdatingGame({}));
     await updateGameInDb(game);
+    setIsAddGameVisible(false);
     dispatch(setIsUpdating(false));
   };
 
