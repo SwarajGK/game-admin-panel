@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const server = 'http://172.105.55.82:5000';
+const server = 'https://172.105.55.82:5000';
 // const server = 'http://localhost:5000';
 
 // Done
