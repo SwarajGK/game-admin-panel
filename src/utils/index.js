@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const server = 'https://172.105.55.82:5000';
+const server = 'http://172.105.55.82:5000';
 // const server = 'http://localhost:5000';
 
 // Done
@@ -11,7 +11,7 @@ export const getUsersAndGames = () => {
 // Done
 export const setUsersInDb = (users) => {
   return axios.post(`${server}/createTable`, {
-    user: users
+    ...users
   }, {
     headers: {
       'Content-Type': 'application/json',

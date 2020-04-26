@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "antd";
 import { useDispatch, useSelector } from 'react-redux';
-import { setUsers, getUsers, setDay, getDay } from './slices/usersSlice';
-import { setGames, getGames, setIsUpdating, setUpdatingGame, getUpdatingGame } from './slices/gamesSlice';
+import { setUsers, getUsers, setDay, getDay, setTableId } from './slices/usersSlice';
+import { setGames, getGames, setIsUpdating, setUpdatingGame, getUpdatingGame, setGameName, getGameName, getLastGameUpdatedId } from './slices/gamesSlice';
 
 import AddUserModal from "./components/AddUserModal";
 import AddGameModal from "./components/AddGameModal";
@@ -17,6 +17,7 @@ function App() {
   const users = useSelector(getUsers);
   const games = useSelector(getGames);
   const day = useSelector(getDay);
+  const gameName = useSelector(getGameName);
   const updatingGame = useSelector(getUpdatingGame);
   const [isAddUserVisible, setIsAddUserVisible] = useState(false);
   const [isAddGameVisible, setIsAddGameVisible] = useState(false);
@@ -29,9 +30,13 @@ function App() {
       dataIndex: user.id
     }))) || [];
     const newDay = (user[0] && user[0].day) || '';
+    const gName = (user[0] && user[0].gameName) || '';
+    const tableId = (user[0] && user[0]._id) || '';
     dispatch(setUsers(formatUsers));
     dispatch(setGames(games));
     dispatch(setDay(newDay));
+    dispatch(setGameName(gName));
+    dispatch(setTableId(tableId));
   }
 
   useEffect(() => {
@@ -57,6 +62,7 @@ function App() {
     dispatch(setIsUpdating(false));
     dispatch(setUpdatingGame({}));
     await updateGameInDb(game);
+    await fetchUsersAndGames();
     setIsAddGameVisible(false);
     dispatch(setIsUpdating(false));
   };
@@ -73,9 +79,12 @@ function App() {
     setIsAddGameVisible(true);
   };
 
-  const updatedGamesData = addGamesRow(games);
-  const lastGameId = games[games.length - 1] && games[games.length - 1].id;
-  const updatedUsersData = addUsersCol(users, lastGameId, updateGame);
+  const gamesLength = (games && games.length) || 0;
+  const lastGameId = games && games[gamesLength - 1] && games[gamesLength - 1].id;
+  const lastUpdatedGameId = useSelector(getLastGameUpdatedId);
+  const updatedUsersData = addUsersCol({ users, lastGameId, updateGame });
+  const updatedGamesData = addGamesRow({ games, lastUpdatedGameId });
+
 
   return (
     <div className="game-data">
@@ -101,6 +110,7 @@ function App() {
           closeAddUserPopup={closeAddUserPopup}
           users={users}
           day={day}
+          gName={gameName}
         />
       )}
       {isAddGameVisible && (
@@ -114,7 +124,7 @@ function App() {
           updatingGameInDb={updatingGameInDb}
         />
       )}
-      <GameTable users={updatedUsersData} games={updatedGamesData} />
+      <GameTable users={updatedUsersData} games={updatedGamesData} lastUpdatedGameId={lastUpdatedGameId} />
     </div>
   );
 }

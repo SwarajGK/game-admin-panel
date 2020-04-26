@@ -4,7 +4,8 @@ const { actions, reducer } = createSlice({
   name: 'appUsers',
   initialState: {
     users: [],
-    day: ''
+    day: '',
+    tableId: ''
   },
   reducers: {
     setUsers: (state, { payload }) => {
@@ -12,6 +13,9 @@ const { actions, reducer } = createSlice({
     },
     setDay: (state, { payload }) => {
       state.day = payload;
+    },
+    setTableId: (state, { payload }) => {
+      state.tableId = payload;
     },
     updateUser: (state, { payload }) => {
       const { id, updatedUser } = payload;
@@ -27,7 +31,8 @@ const { actions, reducer } = createSlice({
 
 export default reducer;
 
-export const { setUsers, updateUser, setDay } = actions;
+export const { setUsers, updateUser, setDay, setTableId } = actions;
 
 export const getUsers = (state) => state.rummy.usersData.users;
 export const getDay = (state) => state.rummy.usersData.day;
+export const getTableId = (state) => state.rummy.usersData.tableId;

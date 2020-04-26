@@ -1,8 +1,9 @@
 import React from 'react';
-import { Typography, Button } from 'antd';
+import { Typography, Avatar } from 'antd';
+
 const { Text } = Typography;
 
-export const addGamesRow = (games) => {
+export const addGamesRow = ({ games = [] }) => {
   const finalGames = games.map((game) => game.users);
   return finalGames.map((game, index) => {
     const resultObject = {};
@@ -11,20 +12,21 @@ export const addGamesRow = (games) => {
     });
     return {
       key: games[index].id,
+      _id: games[index]._id,
       index: index + 1,
       ...resultObject,
     };
   });
 };
 
-export const addUsersCol = (users, lastGameId, updateGame) => {
-  return [{ title: "Game no.", dataIndex: "index" }]
+export const addUsersCol = ({ users, lastGameId, updateGame }) => {
+  return [{ title: "No.", dataIndex: "index", width: 100 }]
     .concat(
       users.map((user) => {
         return {
           ...user,
           width: 100,
-          render: (value) => {
+          render: (value, record) => {
             if (value >= 0) {
               return <span style={{ color: "#52c41a" }}>{value || 0}</span>;
             }
@@ -37,9 +39,12 @@ export const addUsersCol = (users, lastGameId, updateGame) => {
       {
         title: "Update",
         dataIndex: "operation",
+        width: 100,
         render: (text, record) => {
           return lastGameId === record.key ? (
-            <Button type="link" onClick={() => updateGame(record.key)}>Update</Button>
+            <div onClick={() => updateGame(record.key)}>
+              <Avatar style={{ color: '#FFF', backgroundColor: '#87d068' }}>U</Avatar>
+            </div>
             ) : null
         }
       },

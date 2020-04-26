@@ -5,7 +5,9 @@ const { actions, reducer } = createSlice({
   initialState: {
     games: [],
     isUpdating: false,
-    updatingGame: {}
+    updatingGame: {},
+    gameName: '',
+    lastGameUpdatedId: ''
   },
   reducers: {
     setGames: (state, { payload }) => {
@@ -25,14 +27,22 @@ const { actions, reducer } = createSlice({
     },
     setUpdatingGame: (state, { payload }) => {
       state.updatingGame = payload;
+    },
+    setGameName: (state, { payload }) => {
+      state.gameName = payload;
+    },
+    setLastGameUpdatedId: (state, { payload }) => {
+      state.lastGameUpdatedId = payload;
     }
   }
 });
 
 export default reducer;
 
-export const { setGames, updateGame, setIsUpdating, setUpdatingGame } = actions;
+export const { setGames, updateGame, setIsUpdating, setUpdatingGame, setGameName, setLastGameUpdatedId } = actions;
 
 export const getGames = (state) => state.rummy.gamesData.games;
 export const getIsUpdating = (state) => state.rummy.gamesData.isUpdating;
 export const getUpdatingGame = (state) => state.rummy.gamesData.updatingGame;
+export const getGameName = (state) => state.rummy.gamesData.gameName;
+export const getLastGameUpdatedId = (state) => state.rummy.gamesData.lastGameUpdatedId;

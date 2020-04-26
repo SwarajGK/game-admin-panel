@@ -3,11 +3,12 @@ import { Table, Typography } from 'antd';
 
 const { Text } = Typography;
 
-export default function GameTable({ users, games }) {
+export default function GameTable({ users, games, lastUpdatedGameId }) {
   return (
     <Table
       columns={users}
       dataSource={games}
+      rowClassName={(record) => record._id === lastUpdatedGameId ? 'highlight-row' : ''}
       pagination={false}
       scroll={{ y: 240 }}
       bordered

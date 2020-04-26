@@ -1,7 +1,8 @@
 import React, { useState, useCallback } from "react";
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Modal, Radio, InputNumber, message } from "antd";
-import { getIsUpdating, getUpdatingGame } from '../slices/gamesSlice';
+import { getTableId } from '../slices/usersSlice';
+import { getIsUpdating, getUpdatingGame, setLastGameUpdatedId } from '../slices/gamesSlice';
 import uniqid from 'uniqid';
 import { useEffect } from "react";
 
@@ -13,8 +14,10 @@ export default function AddGameModal({
   day,
   updatingGameInDb
 }) {
+  const dispatch = useDispatch();
   const isUpdating = useSelector(getIsUpdating);
   const updatingGame = useSelector(getUpdatingGame);
+  const tableId = useSelector(getTableId);
   let updatingGamePoints = {};
 
   useEffect(() => {
@@ -76,6 +79,7 @@ export default function AddGameModal({
           }
         })
       }
+      dispatch(setLastGameUpdatedId(_id));
       await updatingGameInDb(finalData);
     } else {
       const id = uniqid();
@@ -84,6 +88,7 @@ export default function AddGameModal({
         id,
         name: `Game-${id}`,
         day,
+        tableId,
         users: users.map((user) => {
           if (user.dataIndex === winner) {
             return {
@@ -110,6 +115,8 @@ export default function AddGameModal({
       visible={isAddGameVisible}
       onOk={() => createGame()}
       onCancel={closeAddGamePopup}
+      okButtonProps={{ size: 'large' }}
+      cancelButtonProps={{ size: 'large' }}
     >
       {users.map((user) => {
         const isWinner = user.dataIndex === winner;
