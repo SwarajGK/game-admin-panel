@@ -6,8 +6,9 @@ import { setGames, getGames, setIsUpdating, setUpdatingGame, getUpdatingGame, se
 
 import AddUserModal from "./components/AddUserModal";
 import AddGameModal from "./components/AddGameModal";
+import AddInitGameModal from './components/AddInitGameModal';
 import GameTable from "./components/GameTable";
-import { getUsersAndGames, setGameInDb, updateGameInDb } from './utils';
+import { getUsersAndGames, setGameInDb, updateGameInDb, setUsersInDb } from './utils';
 import { addGamesRow, addUsersCol } from './utils/addRowCol';
 
 import "./App.css";
@@ -21,6 +22,7 @@ function App() {
   const updatingGame = useSelector(getUpdatingGame);
   const [isAddUserVisible, setIsAddUserVisible] = useState(false);
   const [isAddGameVisible, setIsAddGameVisible] = useState(false);
+  const [isAddInitGameVisible, setIsAddInitGameVisible] = useState(false);
 
   const fetchUsersAndGames = async () => {
     const result = await getUsersAndGames();
@@ -55,6 +57,7 @@ function App() {
   const addGame = async (game) => {
     await setGameInDb(game);
     setIsAddGameVisible(false);
+    setIsAddInitGameVisible(false);
     fetchUsersAndGames();
   };
 
@@ -64,7 +67,6 @@ function App() {
     await updateGameInDb(game);
     await fetchUsersAndGames();
     setIsAddGameVisible(false);
-    dispatch(setIsUpdating(false));
   };
 
   const closeAddGamePopup = () => {
@@ -72,11 +74,23 @@ function App() {
     dispatch(setIsUpdating(false));
   };
 
+  const closeAddInitGamePopup = () => {
+    setIsAddInitGameVisible(false);
+  }
+
   const updateGame = (id) => {
     const updateGameData = games.filter((game) => game.id === id)[0];
     dispatch(setIsUpdating(true));
     dispatch(setUpdatingGame(updateGameData));
     setIsAddGameVisible(true);
+  };
+
+  const createNewTable = async () => {
+    await setUsersInDb({
+      gameName: '',
+      user: []
+    });
+    await fetchUsersAndGames();
   };
 
   const gamesLength = (games && games.length) || 0;
@@ -102,6 +116,18 @@ function App() {
             Add game
           </Button>
         </div>
+        {games && gamesLength === 0 && (
+          <div>
+            <Button type="primary" onClick={() => setIsAddInitGameVisible(true)}>
+              Add opening game
+            </Button>
+          </div>
+        )}
+        <div>
+          <Button type="primary" onClick={() => createNewTable()}>
+            Create Game
+          </Button>
+        </div>
       </div>
       {isAddUserVisible && (
         <AddUserModal
@@ -117,6 +143,17 @@ function App() {
         <AddGameModal
           isAddGameVisible={isAddGameVisible}
           closeAddGamePopup={closeAddGamePopup}
+          addGame={addGame}
+          users={users}
+          day={day}
+          updatingGame={updatingGame}
+          updatingGameInDb={updatingGameInDb}
+        />
+      )}
+      {isAddInitGameVisible && (
+        <AddInitGameModal
+          isAddInitGameVisible={isAddInitGameVisible}
+          closeAddInitGamePopup={closeAddInitGamePopup}
           addGame={addGame}
           users={users}
           day={day}
