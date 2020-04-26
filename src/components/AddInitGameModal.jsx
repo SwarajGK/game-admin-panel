@@ -51,6 +51,7 @@ export default function AddInitGameModal({
       onCancel={closeAddInitGamePopup}
       okButtonProps={{ size: 'large' }}
       cancelButtonProps={{ size: 'large' }}
+      okText="Submit"
     >
       {users.map((user) => {
         return (

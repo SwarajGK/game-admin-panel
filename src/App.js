@@ -116,6 +116,8 @@ function App() {
             Add game
           </Button>
         </div>
+      </div>
+      <div className="game-data__action-button">
         {games && gamesLength === 0 && (
           <div>
             <Button type="primary" onClick={() => setIsAddInitGameVisible(true)}>

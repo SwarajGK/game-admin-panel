@@ -77,6 +77,7 @@ export default function AddUserModal({ isAddUserVisible, onAddUsers, closeAddUse
       onCancel={closeAddUserPopup}
       okButtonProps={{ size: 'large' }}
       cancelButtonProps={{ size: 'large' }}
+      okText="Submit"
     >
       <Input placeholder="Game name" value={gameName} className="game-input-wrapper" onChange={updateGameName} />
       {userList.map((user) => (

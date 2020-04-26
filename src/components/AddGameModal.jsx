@@ -117,6 +117,7 @@ export default function AddGameModal({
       onCancel={closeAddGamePopup}
       okButtonProps={{ size: 'large' }}
       cancelButtonProps={{ size: 'large' }}
+      okText="Submit"
     >
       {users.map((user) => {
         const isWinner = user.dataIndex === winner;
