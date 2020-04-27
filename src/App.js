@@ -91,6 +91,7 @@ function App() {
       user: []
     });
     await fetchUsersAndGames();
+    window.location.reload();
   };
 
   const gamesLength = (games && games.length) || 0;
