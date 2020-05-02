@@ -87,10 +87,9 @@ function App() {
 
   const createNewTable = async () => {
     await setUsersInDb({
-      gameName: '',
+      gameName: 'GameName 1',
       user: []
     });
-    await fetchUsersAndGames();
     window.location.reload();
   };
 
